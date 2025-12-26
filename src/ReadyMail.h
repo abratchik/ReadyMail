@@ -71,19 +71,12 @@
 #define AUTH_ERROR_OAUTH2_NOT_SUPPORTED -202
 
 #if defined(ENABLE_FS)
-#if __has_include(<FS.h>)
 #include <FS.h>
-#elif __has_include(<SD.h>) && __has_include(<SPI.h>)
-#include <SPI.h>
-#include <SD.h>
-#else
-#undef ENABLE_FS
-#endif
 #endif // ENABLE_FS
 
 #if defined(ENABLE_FS)
 
-#if (defined(ESP8266) || defined(CORE_ARDUINO_PICO)) || (defined(ESP32) && __has_include(<SPIFFS.h>))
+#if (defined(ESP8266) || defined(CORE_ARDUINO_PICO)) || defined(ESP32)
 
 #if !defined(FILE_OPEN_MODE_READ)
 #define FILE_OPEN_MODE_READ "r"
@@ -97,7 +90,7 @@
 #define FILE_OPEN_MODE_APPEND "a"
 #endif
 
-#elif __has_include(<SD.h>) && __has_include(<SPI.h>)
+#else
 
 #if !defined(FILE_OPEN_MODE_READ)
 #define FILE_OPEN_MODE_READ FILE_READ
@@ -111,7 +104,7 @@
 #define FILE_OPEN_MODE_APPEND FILE_WRITE
 #endif
 
-#endif // __has_include(<SD.h>) && __has_include(<SPI.h>)
+#endif
 
 #endif // ENABLE_FS
 
@@ -198,12 +191,12 @@ enum readymail_file_operating_mode
 
 #if defined(READYCLIENT_SSL_CLIENT) && (defined(ENABLE_IMAP) || defined(ENABLE_SMTP))
 
-#if __has_include(<EPS_SSLClient.h>) && !defined(READYCLIENT_TYPE_1)
+#if defined(ESP_SSLCLIENT_H) && !defined(READYCLIENT_TYPE_1)
 #include <EPS_SSLClient.h>
 #define READYCLIENT_TYPE_1
 #endif
 
-#if __has_include(<WiFiClientSecure.h>) && !defined(READYCLIENT_TYPE_2)
+#if defined(NetworkClientSecure_h) && !defined(READYCLIENT_TYPE_2)
 #include <WiFiClientSecure.h>
 #define READYCLIENT_TYPE_2
 #endif
